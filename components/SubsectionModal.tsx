@@ -114,7 +114,7 @@ export const SubsectionModal = ({
             initial={{ y: "100%" }}
             animate={{
               y: 0,
-              height: isExpanded ? "94vh" : "50vh"
+              height: isExpanded ? "85dvh" : "50dvh"
             }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
