@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, ChevronLeft, ChevronDown, ChevronUp, Check } from "lucide-react";
+import { X, ChevronRight, ChevronLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { Subsection } from "@/lib/sections-data";
 import Image from "next/image";
 
@@ -28,7 +28,6 @@ export const SubsectionModal = ({
   onMarkComplete,
 }: SubsectionModalProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [isReady, setIsReady] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Obtener las imágenes del paso actual
@@ -48,7 +47,6 @@ export const SubsectionModal = ({
   useEffect(() => {
     if (isOpen && subsection) {
       setIsExpanded(true);
-      setIsReady(false);
       setCurrentImageIndex(0);
     }
   }, [isOpen, subsection?.id]);
@@ -68,23 +66,18 @@ export const SubsectionModal = ({
     setIsExpanded(!isExpanded);
   };
 
-  const handleReady = () => {
+  const handleNext = () => {
     if (subsection) {
-      setIsReady(true);
       onMarkComplete(subsection.id);
     }
-  };
-
-  const handleNext = () => {
-    if (isReady) {
-      onNext();
-    }
+    onNext();
   };
 
   const handleClose = () => {
-    if (isReady) {
-      onClose();
+    if (subsection) {
+      onMarkComplete(subsection.id);
     }
+    onClose();
   };
 
   const nextImage = () => {
@@ -210,51 +203,26 @@ export const SubsectionModal = ({
                 </div>
               </div>
 
-              {/* Footer with all buttons in same row */}
+              {/* Footer with navigation buttons */}
               <div className="flex-shrink-0 bg-white border-t border-gray-100 px-3 py-3 md:rounded-b-2xl">
                 <div className="flex justify-between items-center gap-4">
                   {/* Previous Button */}
                   {hasPrevious ? (
                     <button
                       onClick={onPrevious}
-                      className="flex items-center gap-1 px-3 py-2 bg-white text-black border border-black rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm"
+                      className="flex items-center gap-1 px-4 py-2 bg-white text-black border border-black rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Anterior
                     </button>
                   ) : (
-                    <div className="w-24" />
+                    <div />
                   )}
-
-                  {/* Ready Button - Center */}
-                  <button
-                    onClick={handleReady}
-                    disabled={isReady}
-                    className={`flex-1 max-w-[140px] py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm ${
-                      isReady
-                        ? "bg-green-500 text-white cursor-default"
-                        : "bg-yellow-400 text-black hover:bg-yellow-500"
-                    }`}
-                  >
-                    {isReady ? (
-                      <>
-                        <Check className="w-4 h-4" />
-                        Hecho
-                      </>
-                    ) : (
-                      "Listo"
-                    )}
-                  </button>
 
                   {/* Next Button */}
                   <button
                     onClick={hasNext ? handleNext : handleClose}
-                    disabled={!isReady}
-                    className={`flex items-center gap-1 px-3 py-2 rounded-lg font-medium transition-colors text-sm ${
-                      isReady
-                        ? "bg-black text-white hover:bg-gray-800"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
+                    className="flex items-center gap-1 px-4 py-2 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
                   >
                     {hasNext ? "Siguiente" : "Cerrar"}
                     {hasNext && <ChevronRight className="w-4 h-4" />}
