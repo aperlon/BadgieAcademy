@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
 import { SectionCard } from "@/components/SectionCard";
 import { SubsectionModal } from "@/components/SubsectionModal";
+import { CelebrationModal } from "@/components/CelebrationModal";
 import { sectionsData, Subsection } from "@/lib/sections-data";
 import { useProgress } from "@/hooks/useProgress";
 
@@ -21,6 +22,27 @@ export default function Home() {
     null
   );
   const [currentSectionId, setCurrentSectionId] = useState<string | null>(null);
+
+  // Celebration state
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationSectionTitle, setCelebrationSectionTitle] = useState("");
+  const previousSectionProgress = useRef<Record<string, number>>({});
+
+  // Track section progress changes to detect completion
+  useEffect(() => {
+    sectionsData.forEach((section) => {
+      const currentProgress = getSectionProgress(section.id);
+      const prevProgress = previousSectionProgress.current[section.id] || 0;
+
+      // If section just reached 100% and wasn't 100% before
+      if (currentProgress === 100 && prevProgress < 100 && prevProgress > 0) {
+        setCelebrationSectionTitle(section.title);
+        setShowCelebration(true);
+      }
+
+      previousSectionProgress.current[section.id] = currentProgress;
+    });
+  }, [getSectionProgress]);
 
   const handleSubsectionClick = useCallback(
     (subsection: Subsection, sectionId: string) => {
@@ -125,6 +147,10 @@ export default function Home() {
     return sectionIndex > 0;
   }, [currentSubsection, currentSectionId]);
 
+  const handleCloseCelebration = useCallback(() => {
+    setShowCelebration(false);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header globalProgress={globalProgress} />
@@ -155,6 +181,12 @@ export default function Home() {
         hasNext={hasNextSubsection()}
         hasPrevious={hasPreviousSubsection()}
         onMarkComplete={markComplete}
+      />
+
+      <CelebrationModal
+        isOpen={showCelebration}
+        sectionTitle={celebrationSectionTitle}
+        onClose={handleCloseCelebration}
       />
     </div>
   );
