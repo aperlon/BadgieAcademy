@@ -99,7 +99,7 @@ export const SubsectionModal = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 bg-black/50 z-40"
-            onClick={onClose}
+            onClick={handleClose}
           />
 
           {/* Modal Container - Centered on desktop, bottom on mobile */}
@@ -140,7 +140,7 @@ export const SubsectionModal = ({
                     </button>
                     {/* Close Button */}
                     <button
-                      onClick={onClose}
+                      onClick={handleClose}
                       className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                     >
                       <X className="w-5 h-5 text-gray-500" />
