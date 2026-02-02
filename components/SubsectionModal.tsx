@@ -113,10 +113,24 @@ export const SubsectionModal = ({
               }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full md:w-[420px] md:max-h-[85vh] md:h-auto bg-white rounded-t-2xl md:rounded-2xl flex flex-col shadow-2xl"
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.5 }}
+              onDragEnd={(_, info) => {
+                // Si arrastra más de 100px hacia abajo o con velocidad > 500, cerrar
+                if (info.offset.y > 100 || info.velocity.y > 500) {
+                  handleClose();
+                }
+              }}
+              className="w-full md:w-[420px] md:max-h-[85vh] md:h-auto bg-white rounded-t-2xl md:rounded-2xl flex flex-col shadow-2xl touch-none md:touch-auto"
             >
+              {/* Drag handle indicator - Only on mobile */}
+              <div className="flex justify-center pt-2 pb-1 md:hidden">
+                <div className="w-10 h-1 bg-gray-300 rounded-full" />
+              </div>
+
               {/* Header with title and description */}
-              <div className="flex-shrink-0 px-4 py-3 border-b border-gray-100">
+              <div className="flex-shrink-0 px-4 py-3 md:pt-3 border-b border-gray-100">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 pr-3">
                     <h3 className="font-semibold text-black text-lg line-clamp-1">
