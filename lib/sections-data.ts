@@ -65,6 +65,7 @@ export const sectionsData: Section[] = [
         id: "2.3",
         title: "Generar QR",
         description: "Genera un código QR único que el alumno puede escanear para registrarse automáticamente.",
+        images: ["2.3.png", "2.3.1.png"],
       },
       {
         id: "2.4",
@@ -87,6 +88,7 @@ export const sectionsData: Section[] = [
         id: "3.1",
         title: "Click \"Enviar Nueva Insignia\"",
         description: "Desde la pantalla principal, pulsa el botón \"Enviar Nueva Insignia\" para comenzar.",
+        images: ["3.1a.png"],
       },
       {
         id: "3.2",
